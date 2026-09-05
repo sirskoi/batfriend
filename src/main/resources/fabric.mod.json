@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "tameabat",
+  "version": "${version}",
+  "name": "Batfriend",
+  "description": "nanananananananana Bat friend!",
+  "authors": [],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/tameabat/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "sirskoi.tameabat.client.TameabatDataGenerator"
+    ],
+    "client": [
+      "sirskoi.tameabat.client.TameabatClient"
+    ],
+    "main": [
+      "sirskoi.tameabat.Tameabat"
+    ]
+  },
+  "mixins": [
+    "tameabat.mixins.json",
+    {
+      "config": "tameabat.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

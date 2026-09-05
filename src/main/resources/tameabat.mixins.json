@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "sirskoi.tameabat.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "batentity",
+    "batlead",
+    "leashwall",
+    "batleaduntie"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

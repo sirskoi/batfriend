@@ -28,21 +28,25 @@ import sirskoi.tameabat.entity.TameableBat;
 import java.util.UUID;
 
 @Mixin(Bat.class)
-@SuppressWarnings({"AddedMixinMembersNamePattern", "EntityClassMismatch"})
+@SuppressWarnings("AddedMixinMembersNamePattern")
 public abstract class batentity extends Mob implements TameableBat {
 
     @Shadow public abstract void setResting(boolean resting);
 
     @Unique
+    @SuppressWarnings("all")
     private static final EntityDataAccessor<Boolean> TAMED = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
+    @SuppressWarnings("all")
     private static final EntityDataAccessor<Integer> BAT_COLOR = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.INT);
 
     @Unique
+    @SuppressWarnings("all")
     private static final EntityDataAccessor<Boolean> RELAXED = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
+    @SuppressWarnings("all")
     private static final EntityDataAccessor<Boolean> VANILLA_AI = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BOOLEAN);
 
     @Unique

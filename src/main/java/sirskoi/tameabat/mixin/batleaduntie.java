@@ -24,7 +24,7 @@ public abstract class batleaduntie {
     @Inject(method = "canBeLeashed", at = @At("HEAD"), cancellable = true)
     private void allowBatLeash(CallbackInfoReturnable<Boolean> cir) {
         if ((Object) this instanceof Bat bat) {
-            TameableBat tameable = (TameableBat) (Object) bat;
+            TameableBat tameable = (TameableBat) bat;
             if (tameable.isTamed()) {
                 cir.setReturnValue(true);
             }
@@ -39,7 +39,7 @@ public abstract class batleaduntie {
         }
 
         if ((Object) this instanceof Bat bat) {
-            TameableBat tameable = (TameableBat) (Object) bat;
+            TameableBat tameable = (TameableBat) bat;
             ItemStack itemstack = player.getItemInHand(hand);
             Level level = player.level();
 

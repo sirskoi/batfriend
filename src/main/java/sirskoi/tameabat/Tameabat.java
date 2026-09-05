@@ -2,9 +2,7 @@ package sirskoi.tameabat;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ambient.Bat;
@@ -18,18 +16,12 @@ public class Tameabat implements ModInitializer {
     private int tickCounter = 0;
 
     @Override
+    @SuppressWarnings("resource")
     public void onInitialize() {
-        UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
-            if (level.isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
-                return InteractionResult.PASS;
-            }
-            return InteractionResult.PASS;
-        });
-
-        // 15 second night vision with 10 second check
+        // night vision checks every 10 seconds
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             tickCounter++;
-            if (tickCounter >= 200) {
+            if (tickCounter >= 100) {
                 tickCounter = 0;
 
                 for (ServerPlayer player : server.getPlayerList().getPlayers()) {
@@ -40,7 +32,7 @@ public class Tameabat implements ModInitializer {
                     );
 
                     if (!nearbyBats.isEmpty()) {
-                        player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, false));
+                        player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
                     }
                 }
             }

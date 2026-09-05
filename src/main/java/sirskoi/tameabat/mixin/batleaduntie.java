@@ -23,19 +23,23 @@ public abstract class batleaduntie {
 
     @Inject(method = "canBeLeashed", at = @At("HEAD"), cancellable = true)
     private void allowBatLeash(CallbackInfoReturnable<Boolean> cir) {
-        if ((Object) this instanceof Bat bat && bat instanceof TameableBat tameable && tameable.isTamed()) {
-            cir.setReturnValue(true);
+        if ((Object) this instanceof Bat bat) {
+            TameableBat tameable = (TameableBat) (Object) bat;
+            if (tameable.isTamed()) {
+                cir.setReturnValue(true);
+            }
         }
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
+    @SuppressWarnings("resource")
     private void onMobInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (hand != InteractionHand.MAIN_HAND) {
             return;
         }
 
-        if ((Object) this instanceof Bat bat && bat instanceof TameableBat tameable) {
-            Mob mob = (Mob) (Object) this;
+        if ((Object) this instanceof Bat bat) {
+            TameableBat tameable = (TameableBat) (Object) bat;
             ItemStack itemstack = player.getItemInHand(hand);
             Level level = player.level();
 
@@ -105,7 +109,7 @@ public abstract class batleaduntie {
             }
 
             // sugar triggers vanilla ai
-            if (mob.isLeashed() && itemstack.is(Items.SUGAR) && !tameable.hasVanillaAi()) {
+            if (bat.isLeashed() && itemstack.is(Items.SUGAR) && !tameable.hasVanillaAi()) {
                 if (!level.isClientSide()) {
                     tameable.setVanillaAi(true);
                     tameable.setRelaxed(false);
@@ -129,7 +133,7 @@ public abstract class batleaduntie {
             }
 
             // spidereye relaxes bat from flying
-            if (mob.isLeashed() && itemstack.is(Items.SPIDER_EYE) && !tameable.isRelaxed()) {
+            if (bat.isLeashed() && itemstack.is(Items.SPIDER_EYE) && !tameable.isRelaxed()) {
                 if (!level.isClientSide()) {
                     tameable.setRelaxed(true);
                     tameable.setVanillaAi(false);
@@ -183,9 +187,9 @@ public abstract class batleaduntie {
             }
 
             // lead attach
-            if (itemstack.is(Items.LEAD) && !mob.isLeashed()) {
+            if (itemstack.is(Items.LEAD) && !bat.isLeashed()) {
                 if (!level.isClientSide()) {
-                    mob.setLeashedTo(player, true);
+                    bat.setLeashedTo(player, true);
                     if (!player.isCreative()) {
                         itemstack.shrink(1);
                     }
@@ -195,9 +199,9 @@ public abstract class batleaduntie {
             }
 
             // lead detach
-            if (mob.isLeashed()) {
+            if (bat.isLeashed()) {
                 if (!level.isClientSide()) {
-                    mob.dropLeash();
+                    bat.dropLeash();
                     tameable.setRelaxed(false);
                     tameable.setVanillaAi(false);
                     bat.setResting(false);

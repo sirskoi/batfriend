@@ -28,9 +28,9 @@ import sirskoi.tameabat.entity.TameableBat;
 import java.util.UUID;
 
 @Mixin(Bat.class)
+@SuppressWarnings({"AddedMixinMembersNamePattern", "EntityClassMismatch"})
 public abstract class batentity extends Mob implements TameableBat {
 
-    @Shadow public abstract boolean isResting();
     @Shadow public abstract void setResting(boolean resting);
 
     @Unique

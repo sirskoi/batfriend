@@ -26,7 +26,10 @@ public class battexture {
     @Unique
     private static final Map<BatRenderState, DyeColor> BAT_COLORS = new WeakHashMap<>();
 
-    @Inject(method = "extractRenderState", at = @At("TAIL"))
+    @Inject(
+            method = "extractRenderState(Lnet/minecraft/world/entity/ambient/Bat;Lnet/minecraft/client/renderer/entity/state/BatRenderState;F)V",
+            at = @At("TAIL")
+    )
     private void onExtractRenderState(Bat bat, BatRenderState state, float partialTicks, CallbackInfo ci) {
         if (bat instanceof TameableBat tameable && tameable.isTamed()) {
             DyeColor color = tameable.getBatColor();
@@ -36,7 +39,11 @@ public class battexture {
         }
     }
 
-    @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "getTextureLocation(Lnet/minecraft/client/renderer/entity/state/BatRenderState;)Lnet/minecraft/resources/Identifier;",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     private void onGetTextureLocation(BatRenderState state, CallbackInfoReturnable<Identifier> cir) {
         DyeColor color = BAT_COLORS.get(state);
         if (color != null) {

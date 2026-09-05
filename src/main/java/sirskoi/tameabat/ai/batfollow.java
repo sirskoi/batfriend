@@ -28,6 +28,7 @@ public class batfollow extends Goal {
     }
 
     @Override
+    @SuppressWarnings("resource")
     public boolean canUse() {
         if (!this.tameableBat.isTamed()) {
             return false;
@@ -39,11 +40,7 @@ public class batfollow extends Goal {
         }
 
         this.owner = this.bat.level().getPlayerByUUID(ownerUuid);
-        if (this.owner == null || this.owner.isSpectator()) {
-            return false;
-        }
-
-        return true;
+        return this.owner != null && !this.owner.isSpectator();
     }
 
     @Override
@@ -119,8 +116,8 @@ public class batfollow extends Goal {
                 targetY = p.getEyeY() - 0.15D + flutter;
                 targetZ += offsetZ;
             } else {
-                double offsetX = horizontalDist > 0.1D ? (diffX / horizontalDist) * 1.0D : 1.0D;
-                double offsetZ = horizontalDist > 0.1D ? (diffZ / horizontalDist) * 1.0D : 0.0D;
+                double offsetX = horizontalDist > 0.1D ? (diffX / horizontalDist) : 1.0D;
+                double offsetZ = horizontalDist > 0.1D ? (diffZ / horizontalDist) : 0.0D;
 
                 targetX += offsetX;
                 targetY += 0.25D + flutter;

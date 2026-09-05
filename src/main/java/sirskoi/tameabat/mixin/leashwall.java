@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class leashwall {
 
     @Inject(method = "survives", at = @At("HEAD"), cancellable = true)
+    @SuppressWarnings("resource")
     private void allowWalls(CallbackInfoReturnable<Boolean> cir) {
         LeashFenceKnotEntity knot = (LeashFenceKnotEntity) (Object) this;
         BlockState state = knot.level().getBlockState(knot.getPos());

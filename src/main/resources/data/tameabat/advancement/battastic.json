@@ -1,0 +1,19 @@
+{
+  "parent": "tameabat:bat_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:red_dye"
+    },
+    "title": "Battastic!",
+    "description": "Give your bat a battastical look with dye",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

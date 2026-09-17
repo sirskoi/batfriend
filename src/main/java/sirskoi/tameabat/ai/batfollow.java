@@ -79,7 +79,10 @@ public class batfollow extends Goal {
 
         Vec3 currentPos = this.owner.position();
         boolean moved = this.lastPlayerPos == null || currentPos.distanceToSqr(this.lastPlayerPos) > 0.01D;
-        boolean interacted = this.owner.swinging || this.owner.attackAnim > 0.0F;
+
+        // FIX: Visual swing fields were moved to RenderState in modern mappings.
+        // We now rely on server-side mechanics: is the player using an item, or is their attack cooldown active?
+        boolean interacted = this.owner.isUsingItem() || this.owner.getAttackStrengthScale(1.0F) < 1.0F;
 
         if (!moved && !interacted) {
             this.playerIdleTicks++;

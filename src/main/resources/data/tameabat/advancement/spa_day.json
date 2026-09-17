@@ -1,0 +1,19 @@
+{
+  "parent": "tameabat:bat_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:apple"
+    },
+    "title": "Spa Day",
+    "description": "Make your bat relax with fruit",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

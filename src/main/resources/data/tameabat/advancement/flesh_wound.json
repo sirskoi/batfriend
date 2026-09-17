@@ -1,0 +1,19 @@
+{
+  "parent": "tameabat:bat_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:honeycomb"
+    },
+    "title": "It's but a flesh wound!",
+    "description": "Heal your bat using honeycomb",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

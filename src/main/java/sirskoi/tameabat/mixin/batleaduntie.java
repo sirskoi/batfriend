@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,6 +21,25 @@ import sirskoi.tameabat.entity.TameableBat;
 
 @Mixin(Mob.class)
 public abstract class batleaduntie {
+
+    @Unique
+    @SuppressWarnings("resource")
+    private void awardAdvancement(Player player, String advancementId) {
+        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            net.minecraft.server.MinecraftServer server = serverPlayer.level().getServer();
+
+            net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.fromNamespaceAndPath("tameabat", advancementId);
+            net.minecraft.advancements.AdvancementHolder adv = server.getAdvancements().get(id);
+            if (adv != null) {
+                net.minecraft.advancements.AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(adv);
+                if (!progress.isDone()) {
+                    for (String crit : progress.getRemainingCriteria()) {
+                        serverPlayer.getAdvancements().award(adv, crit);
+                    }
+                }
+            }
+        }
+    }
 
     @Inject(method = "canBeLeashed", at = @At("HEAD"), cancellable = true)
     private void allowBatLeash(CallbackInfoReturnable<Boolean> cir) {
@@ -64,6 +84,8 @@ public abstract class batleaduntie {
                                         7, 0.2D, 0.2D, 0.2D, 0.1D
                                 );
                             }
+
+                            awardAdvancement(player, "bat_friend");
                         } else {
                             if (level instanceof ServerLevel serverLevel) {
                                 serverLevel.sendParticles(
@@ -87,8 +109,10 @@ public abstract class batleaduntie {
                     tameable.setVanillaAi(false);
                     bat.setResting(false);
 
+                    boolean healed = false;
                     if (bat.getHealth() < bat.getMaxHealth()) {
                         bat.heal(4.0F);
+                        healed = true;
                     }
 
                     bat.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.2F);
@@ -102,6 +126,10 @@ public abstract class batleaduntie {
                                 bat.getX(), bat.getY() + 0.3D, bat.getZ(),
                                 6, 0.2D, 0.2D, 0.2D, 0.1D
                         );
+                    }
+
+                    if (healed) {
+                        awardAdvancement(player, "flesh_wound");
                     }
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);
@@ -127,13 +155,20 @@ public abstract class batleaduntie {
                                 7, 0.2D, 0.2D, 0.2D, 0.05D
                         );
                     }
+
+                    awardAdvancement(player, "mach_6");
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);
                 return;
             }
 
-            // spidereye relaxes bat from flying
-            if (bat.isLeashed() && itemstack.is(Items.SPIDER_EYE) && !tameable.isRelaxed()) {
+            // check if the item is a valid relaxing fruit
+            boolean isRelaxFruit = itemstack.is(Items.APPLE) || itemstack.is(Items.GLOW_BERRIES) ||
+                    itemstack.is(Items.CHORUS_FRUIT) || itemstack.is(Items.SWEET_BERRIES) ||
+                    itemstack.is(Items.MELON_SLICE);
+
+            // fruit relaxes bat from flying
+            if (bat.isLeashed() && isRelaxFruit && !tameable.isRelaxed()) {
                 if (!level.isClientSide()) {
                     tameable.setRelaxed(true);
                     tameable.setVanillaAi(false);
@@ -151,6 +186,8 @@ public abstract class batleaduntie {
                                 6, 0.15D, 0.15D, 0.15D, 0.02D
                         );
                     }
+
+                    awardAdvancement(player, "spa_day");
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);
                 return;
@@ -180,6 +217,7 @@ public abstract class batleaduntie {
                         if (!player.isCreative()) {
                             itemstack.shrink(1);
                         }
+                        awardAdvancement(player, "battastic");
                     }
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);

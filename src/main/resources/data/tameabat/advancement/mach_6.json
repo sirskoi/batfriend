@@ -1,0 +1,19 @@
+{
+  "parent": "tameabat:bat_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:sugar"
+    },
+    "title": "Bat or X-15?",
+    "description": "Make your bat go mach 6 with some sugar",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
